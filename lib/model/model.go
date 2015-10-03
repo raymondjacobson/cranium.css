@@ -3,9 +3,7 @@ package model
 type Ptag struct {
     Id string
     FontSize int
-    FontWeight int
     FontStyle int
-    TextDecoration int
     Padding int
     Hover int
     Click int
@@ -15,9 +13,7 @@ type Ptag struct {
 type Atag struct {
     Id string
     FontSize int
-    FontWeight int
     FontStyle int
-    TextDecoration int
     Padding int
     Hover int
     Click int
@@ -26,7 +22,7 @@ type Atag struct {
 
 type Imgtag struct {
     Id string
-    Area int
+    Width int
     Padding int
     Hover int
     Click int
