@@ -8,6 +8,7 @@ import (
     "net/http"
     "math/rand"
     "os"
+    "os/exec"
     "strings"
     "strconv"
     "time"
@@ -133,7 +134,7 @@ func main() {
             preprocess.GenerateTags(readfile, outfile)
             // The user already exists, so ask the database for attributes
             title = craniumId.(string)
-            visitor := db.FetchMostRecentDataEntry(craniumDB, craniumId.(string))
+            visitor := db.FetchVisitor(craniumDB, craniumId.(string))
             de = visitor.Data[0]
         }
         craniumcss := cssgen.GenCss(de)
@@ -163,6 +164,14 @@ func main() {
             } else if string(tag_pick[1][0]) == "i" {
                 db.UpdateImgtagField(craniumDB, craniumId.(string), tag)
             }
+        }
+        app := "mongoexport"
+        cmd := exec.Command(app, "--host=127.0.0.1", "--db", "cranium", "--collection", "visitors", "--out", "dump/visitors.json")
+        _, err := cmd.Output()
+
+        if err != nil {
+            println(err.Error())
+            return
         }
     })
 

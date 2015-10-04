@@ -41,7 +41,7 @@ func InsertNewDataEntry(db *mgo.Database, vid string,
 	return de
 }
 
-func FetchMostRecentDataEntry(db *mgo.Database, vid string) model.Visitor {
+func FetchVisitor(db *mgo.Database, vid string) model.Visitor {
 	c := db.C("visitors")
 	visitor := model.Visitor{}
 	c.Find(bson.M{"vid": vid}).One(&visitor)
