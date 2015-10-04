@@ -2,7 +2,7 @@ package cssgen
 
 import (
   "fmt"
-  "../model"
+  "model"
 )
 
 
