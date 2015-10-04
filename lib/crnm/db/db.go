@@ -33,9 +33,9 @@ func InsertNewVisitor(db *mgo.Database, vid string) {
 
 func InsertNewDataEntry(db *mgo.Database, vid string) {
 	c := db.C("visitors")
-	a := []model.Atag{model.Atag{"test", 15, 15, 15, 15, 15}}
-	p := []model.Ptag{model.Ptag{"test", 15, 15, 15, 15, 15}}
-	img := []model.Imgtag{model.Imgtag{"test", 15, 15}}
+	a := []model.Atag{model.AtagDefault}
+	p := []model.Ptag{model.PtagDefault}
+	img := []model.Imgtag{model.Imgtag{"test", 15, 15, 0, 0, 0}}
 	de := model.DataEntry{a, p, img}
 	c.Update(bson.M{"vid": vid}, bson.M{"$addToSet": bson.M{"data" : &de}})
 }
