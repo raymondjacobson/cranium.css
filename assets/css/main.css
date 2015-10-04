@@ -1,0 +1,37 @@
+body {
+	margin: 20px auto 20px;
+}
+ul {
+	display: block;
+	width: 100%;
+	clear: both;
+}
+
+li {
+	text-align: center;
+	display: inline;
+	width: 200px;
+	float: left;
+}
+
+p {
+	float: left;
+	clear: both;
+}
+
+a {
+	float: left;
+	clear: both;
+}
+
+h5 {
+	font-style: italic;
+}
+
+h6 {
+	font-size: 12;
+	font-weight: bold;
+	float: left;
+	width: 370px;
+	display: inline;
+}
