@@ -1,0 +1,73 @@
+{
+  "data" : [
+    {
+      "atags" : [
+        {
+          "id" : "imp-a-0",
+          "fontsize" : 16,
+          "fontstyle" : 3,
+          "color" : true,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : true
+        },
+        {
+          "id" : "nimp-a-0",
+          "fontsize" : 16,
+          "fontstyle" : 3,
+          "color" : true,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : false
+        }
+      ],
+      "ptags" : [
+        {
+          "id" : "imp-p-0",
+          "fontsize" : 16,
+          "fontstyle" : 0,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : true
+        },
+        {
+          "id" : "nimp-p-0",
+          "fontsize" : 16,
+          "fontstyle" : 0,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : false
+        },
+        {
+          "id" : "nimp-p-1",
+          "fontsize" : 16,
+          "fontstyle" : 0,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : false
+        }
+      ],
+      "imgtags" : [
+        {
+          "id" : "nimp-img-0",
+          "width" : 100,
+          "padding" : 10,
+          "hover" : 0,
+          "click" : 0,
+          "frametime" : 0,
+          "important" : false
+        }
+      ]
+    }
+  ]
+}
