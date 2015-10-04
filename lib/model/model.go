@@ -12,6 +12,7 @@ type Ptag struct {
     Hover int
     Click int
     FrameTime int
+    Important bool
 }
 
 type Atag struct {
@@ -23,6 +24,7 @@ type Atag struct {
     Hover int
     Click int
     FrameTime int
+    Important bool
 }
 
 func getFontStyle(FontStyle int) string {
@@ -83,6 +85,7 @@ type Imgtag struct {
     Hover int
     Click int
     FrameTime int
+    Important bool
 }
 
 func (i Imgtag) GetCssWidth() string {
