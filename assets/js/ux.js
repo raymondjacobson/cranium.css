@@ -1,6 +1,7 @@
 var idEvents = {};
 
 $(document).ready(function() {
+  console.log("GO");
   $("[id]").each(function(i, elem) {
     var id = elem.id;
     var d = new Date();
@@ -71,7 +72,7 @@ $(document).ready(function() {
   });
 
   // Dump the event data when the user leaves the page.
-  $(window).bind("click", function() {
+  window.onbeforeunload = function() {
     var data = [];
     for(id in idEvents) {
       var dataVals = [Math.floor(idEvents[id]["hoverTime"]*10),
@@ -79,8 +80,17 @@ $(document).ready(function() {
                       Math.floor(idEvents[id]["frameTime"]*10)];
       data.push(id + ':' + dataVals.join());
     }
-    $.post("/data", data.join(';'));
-  });
+    data = data.join(';');
+    data_package = JSON.stringify({"data": data})
+    console.log(data_package);
+    $.ajax({
+      type: "POST",
+      processData: false,
+      dataType: "jsonp",
+      url: "/data",
+      data: data_package
+    });
+  };
 });
 
 function isElementInViewport(id) {

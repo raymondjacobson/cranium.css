@@ -1,7 +1,7 @@
 package main
 
 import (
-    "fmt"
+    // "fmt"
     "html/template"
     "github.com/gin-gonic/contrib/sessions"
     "github.com/gin-gonic/gin"
@@ -153,15 +153,14 @@ func main() {
         var ents Entities
         c.BindJSON(&ents)
         c.JSON(200, ents)
-        fmt.Printf("%v\n", ents)
         tags := deserialize(ents.Data)
         for _, tag := range tags {
-            fmt.Println(tag)
-            if tag.Id[0] == 'a' {
+            tag_pick := strings.Split(string(tag.Id), "-")
+            if string(tag_pick[1][0]) == "a" {
                 db.UpdateAtagField(craniumDB, craniumId.(string), tag)
-            } else if tag.Id[0] == 'p' {
+            } else if string(tag_pick[1][0]) == "p" {
                 db.UpdatePtagField(craniumDB, craniumId.(string), tag)
-            } else if tag.Id[0] == 'i' {
+            } else if string(tag_pick[1][0]) == "i" {
                 db.UpdateImgtagField(craniumDB, craniumId.(string), tag)
             }
         }
