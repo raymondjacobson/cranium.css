@@ -47,3 +47,30 @@ func FetchMostRecentDataEntry(db *mgo.Database, vid string) model.Visitor {
 	c.Find(bson.M{"vid": vid}).One(&visitor)
 	return visitor
 }
+
+func UpdateAtagField(db *mgo.Database, vid string, tag model.Tag) {
+    c := db.C("visitors")
+    c.Update(bson.M{"vid": vid, "data.0.atags.id": tag.Id},
+             bson.M{"$set": bson.M{"data.0.atags.$.hover": tag.Hover,
+                                   "data.0.atags.$.click": tag.Click,
+                                   "data.0.atags.$.frametime": tag.Frame, 
+                                  }})
+}
+
+func UpdatePtagField(db *mgo.Database, vid string, tag model.Tag) {
+    c := db.C("visitors")
+    c.Update(bson.M{"vid": vid, "data.0.ptags.id": tag.Id},
+             bson.M{"$set": bson.M{"data.0.ptags.$.hover": tag.Hover,
+                                   "data.0.ptags.$.click": tag.Click,
+                                   "data.0.ptags.$.frametime": tag.Frame, 
+                                  }})
+}
+
+func UpdateImgtagField(db *mgo.Database, vid string, tag model.Tag) {
+    c := db.C("visitors")
+    c.Update(bson.M{"vid": vid, "data.0.imgtags.id": tag.Id},
+             bson.M{"$set": bson.M{"data.0.imgtags.$.hover": tag.Hover,
+                                   "data.0.imgtags.$.click": tag.Click,
+                                   "data.0.imgtags.$.frametime": tag.Frame, 
+                                  }})
+}

@@ -4,6 +4,13 @@ import (
     "fmt"
 )
 
+type Tag struct {
+    Id string
+    Hover int
+    Click int
+    Frame int
+}
+
 type Ptag struct {
     Id string
     FontSize int

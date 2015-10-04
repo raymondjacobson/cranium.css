@@ -1,12 +1,15 @@
 package main
 
 import (
+    "fmt"
     "html/template"
     "github.com/gin-gonic/contrib/sessions"
     "github.com/gin-gonic/gin"
     "net/http"
     "math/rand"
     "os"
+    "strings"
+    "strconv"
     "time"
     "./lib/cssgen"
     "./lib/db"
@@ -22,6 +25,27 @@ func randomString(n int) string {
         b[i] = letterRunes[rand.Intn(len(letterRunes))]
     }
     return string(b)
+}
+
+func deserialize(input string) []model.Tag {
+  var tags []model.Tag
+ 
+  tag_names := strings.Split(input, ";")
+ 
+  for i := 0; i < len(tag_names); i++ {
+    split_tag := strings.Split(tag_names[i], ":")
+    id := split_tag[0]
+ 
+    nums := strings.Split(split_tag[1], ",")
+ 
+    hover, _ := strconv.Atoi(nums[0])
+    click, _ := strconv.Atoi(nums[1])
+    frame, _ := strconv.Atoi(nums[2])
+ 
+    tags = append(tags, model.Tag{id, hover, click, frame})
+  }
+ 
+  return tags
 }
 
 func main() {
@@ -117,6 +141,30 @@ func main() {
             "title": "cranium.css | " + title,
             "craniumcss": template.CSS(craniumcss),
         })
+    })
+
+    type Entities struct {
+        Data string `json:"data" binding:"required"`
+    }
+
+    r.POST("/data", func(c *gin.Context) {
+        session := sessions.Default(c)
+        craniumId := session.Get("cranium_id")
+        var ents Entities
+        c.BindJSON(&ents)
+        c.JSON(200, ents)
+        fmt.Printf("%v\n", ents)
+        tags := deserialize(ents.Data)
+        for _, tag := range tags {
+            fmt.Println(tag)
+            if tag.Id[0] == 'a' {
+                db.UpdateAtagField(craniumDB, craniumId.(string), tag)
+            } else if tag.Id[0] == 'p' {
+                db.UpdatePtagField(craniumDB, craniumId.(string), tag)
+            } else if tag.Id[0] == 'i' {
+                db.UpdateImgtagField(craniumDB, craniumId.(string), tag)
+            }
+        }
     })
 
     r.Run(":1225")
