@@ -36,7 +36,7 @@ func readFile(file *os.File) string {
 func GenerateTags(rf *os.File, of *os.File) ([]string, []string, []string, []string, []string, []string) {
   readfile := readFile(rf)
 
-  re := regexp.MustCompile("<[a-zA-Z0-9= \"]*>")
+  re := regexp.MustCompile("<[a-zA-Z0-9= :/\\.\\-\\*\"]*>")
   tags := re.FindAllIndex([]byte(readfile), -1)
 
   a_count := 0
