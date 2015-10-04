@@ -2,6 +2,7 @@ import argparse
 import csv
 import json
 
+
 def main(de0):
   dump0() if de0 else dumpAll()
 
@@ -9,34 +10,50 @@ def main(de0):
 def dumpAll():
   with open("de_dump_all.json", "r") as de_dump_all:
     dump = json.load(de_dump_all)
+    a_file = open("de_td_all_a.csv", "wb+")
+    p_file = open("de_td_all_p.csv", "wb+")
+    img_file = open("de_td_all_img.csv", "wb+")
 
-    with open("de_td_all.csv", "wb+") as de_td_all:
-      writer = csv.writer(de_td_all)
-      for de in dump["data"]:
-        readDataEntry(de, writer)
-    de_td_all.close()
+    a_writer = csv.writer(a_file)
+    p_writer = csv.writer(p_file)
+    img_writer = csv.writer(img_file)
+
+    for de in dump["data"]:
+      writeDataEntry(de, a_writer, p_writer, img_writer)
+    
+    a_file.close()
+    p_file.close()
+    img_file.close()
   de_dump_all.close()
 
 
 def dump0():
   with open("de_dump0.json", "r") as de_dump0:
     dump = json.load(de_dump0)
+    a_file = open("de_td0_a.csv", "wb+")
+    p_file = open("de_td0_p.csv", "wb+")
+    img_file = open("de_td0_img.csv", "wb+")
 
-    with open("de_td0.csv", "wb+") as de_td0:
-      writer = csv.writer(de_td0)
-      readDataEntry(dump["data"][0], writer)
-    de_td0.close()
+    a_writer = csv.writer(a_file)
+    p_writer = csv.writer(p_file)
+    img_writer = csv.writer(img_file)
+
+    writeDataEntry(dump["data"][0], a_writer, p_writer, img_writer)
+    
+    a_file.close()
+    p_file.close()
+    img_file.close()
   de_dump0.close()
 
 
-def readDataEntry(de, writer):
+def writeDataEntry(de, a_writer, p_writer, img_writer):
   for tagType, elems in de.iteritems():
     if tagType == "atags":
-      writeAtags(elems, writer)
+      writeAtags(elems, a_writer)
     elif tagType == "ptags":
-      writePtags(elems, writer)
+      writePtags(elems, p_writer)
     else:
-      writeImgtags(elems, writer)
+      writeImgtags(elems, img_writer)
 
 
 def writeAtags(elems, writer):
