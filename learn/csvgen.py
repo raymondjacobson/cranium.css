@@ -11,33 +11,52 @@ db = client.cranium
 def main(de0, vid):
   dump0(vid) if de0 else dumpAll(vid)
 
-
 def dumpAll(vid):
   query = db.visitors.find_one({"vid": vid})
   print query['data']
-  with open("learn/de_td_all.csv", "wb+") as de_td_all:
-    writer = csv.writer(de_td_all)
-    for de in query['data']:
-      readDataEntry(de, writer)
 
+  a_file = open("learn/de_td_all_a.csv", "wb+")
+  p_file = open("learn/de_td_all_p.csv", "wb+")
+  img_file = open("learn/de_td_all_img.csv", "wb+")
+
+  a_writer = csv.writer(a_file)
+  p_writer = csv.writer(p_file)
+  img_writer = csv.writer(img_file)
+
+  for de in query["data"]:
+    writeDataEntry(de, a_writer, p_writer, img_writer)
+  
+  a_file.close()
+  p_file.close()
+  img_file.close()
 
 def dump0(vid):
   query = db.visitors.find_one({"vid": vid})
   print query['data']
-  with open("learn/de_td0.csv", "wb+") as de_td0:
-    writer = csv.writer(de_td0)
-    readDataEntry(query['data'][0], writer)
+
+  a_file = open("learn/de_td0_a.csv", "wb+")
+  p_file = open("learn/de_td0_p.csv", "wb+")
+  img_file = open("learn/de_td0_img.csv", "wb+")
+
+  a_writer = csv.writer(a_file)
+  p_writer = csv.writer(p_file)
+  img_writer = csv.writer(img_file)
+
+  writeDataEntry(query["data"][0], a_writer, p_writer, img_writer)
+  
+  a_file.close()
+  p_file.close()
+  img_file.close()
 
 
-
-def readDataEntry(de, writer):
+def writeDataEntry(de, a_writer, p_writer, img_writer):
   for tagType, elems in de.iteritems():
     if tagType == "atags":
-      writeAtags(elems, writer)
+      writeAtags(elems, a_writer)
     elif tagType == "ptags":
-      writePtags(elems, writer)
+      writePtags(elems, p_writer)
     else:
-      writeImgtags(elems, writer)
+      writeImgtags(elems, img_writer)
 
 
 def writeAtags(elems, writer):
