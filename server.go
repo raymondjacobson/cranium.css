@@ -192,10 +192,21 @@ func main() {
         // Save new DE entry
 
         // Export DE to CSV
+        // cmd4 := exec.Command(app, "learn/csvgen.py", craniumId.(string))
+        // cmd4.Output()
 
         // Concat CSV with train
 
         // run SVM
+        // python learn/svm.py learn/training/imgtag.csv img
+        // cmd5 := exec.Command(app, "learn/svm.py", "learn/training/atag.csv", "a")
+        // cmd5.Output()
+
+        // cmd6 := exec.Command(app, "learn/svm.py", "learn/training/ptag.csv", "p")
+        // cmd5.Output()
+
+        // cmd7 := exec.Command(app, "learn/svm.py", "learn/training/imgtag.csv", "img")
+        // cmd5.Output()
     })
 
     r.Run(":1225")
