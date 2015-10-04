@@ -1,7 +1,7 @@
 package model
 
 import (
-    // "strconv"
+    "strconv"
 )
 
 type Ptag struct {
@@ -25,7 +25,7 @@ type Atag struct {
     FrameTime int
 }
 
-func getFontStyle string {
+func getFontStyle(FontStyle int) string {
     switch {
         case FontStyle == 0: // Normal
             return "font-style: normal; font-weight: normal; text-decoration: none;"
@@ -42,34 +42,35 @@ func getFontStyle string {
         case FontStyle == 6: // Bold Underline
             return "font-style: normal; font-weight: bold; text-decoration: underline;"
     }
+    return "font-style: normal; font-weight: normal; text-decoration: none;"
 }
 
-func (p Ptag) GetCssFontStyle string {
+func (p Ptag) GetCssFontStyle() string {
     return getFontStyle(p.FontStyle)
 }
 
-func (p Ptag) GetCssFontSize string {
+func (p Ptag) GetCssFontSize() string {
     return "font-size: " + strconv.Itoa(p.FontSize) + ";"
 }
 
-func (p Ptag) GetCssPadding string {
+func (p Ptag) GetCssPadding() string {
     return "padding: " + strconv.Itoa(p.Padding) + "px 0 " + strconv.Itoa(p.Padding) + "px 0;"
 }
 
-func (a Atag) GetCssFontStyle string {
+func (a Atag) GetCssFontStyle() string {
     return getFontStyle(a.FontStyle)
 }
 
-func (a Atag) GetCssFontSize string {
+func (a Atag) GetCssFontSize() string {
     return "font-size: " + strconv.Itoa(a.FontSize) + ";"
 }
 
-func (a Atag) GetCssPadding string {
+func (a Atag) GetCssPadding() string {
     return "padding: " + strconv.Itoa(a.Padding) + "px 0 " + strconv.Itoa(a.Padding) + "px 0;"
 }
 
-func (a Atag) GetCssFont string {
-    if a.color {
+func (a Atag) GetCssFont() string {
+    if a.Color {
         return "color: #765DB6;"
     }
     return "color: #222;"
@@ -84,11 +85,11 @@ type Imgtag struct {
     FrameTime int
 }
 
-func (i Imgtag) GetCssWidth string {
+func (i Imgtag) GetCssWidth() string {
     return "width: " + strconv.Itoa(i.Width) + "px;"
 }
 
-func (i Imgtag) GetCssPadding string {
+func (i Imgtag) GetCssPadding() string {
     return "padding: " + strconv.Itoa(i.Padding) + "px 0 " + strconv.Itoa(i.Padding) + "px 0;"
 }
 
@@ -103,20 +104,20 @@ type Visitor struct {
     Data []DataEntry
 }
 
-const PtagDefault = Ptag {
+var PtagDefault = Ptag {
     FontSize: 16,
     FontStyle: 0,
-    Padding: 10
+    Padding: 10,
 }
 
-const AtagDefault = Atag {
+var AtagDefault = Atag {
     FontSize: 16,
     FontStyle: 3,
-    Color: 1,
-    Padding: 10
+    Color: true,
+    Padding: 10,
 }
 
-const ImgtagDefault = Imgtag {
+var ImgtagDefault = Imgtag {
     Width: 100,
-    Padding: 10
+    Padding: 10,
 }

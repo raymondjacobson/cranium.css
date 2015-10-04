@@ -4,22 +4,20 @@
 //  unique identifiers
 //----------------------------------------------------
 
-package main
+package preprocess
 
 import (
   "os"
-  "fmt"
-  "strings"
   "regexp"
   "strconv"
+  "strings"
 )
 
 const prefix = "imp"
 var tags = []string {"p", "a", "img"}
 
-func readFile(filename string) string {
+func readFile(file *os.File) string {
   bufsize := 1024
-  file, _ := os.Open(filename)
 
   data := make([]byte, bufsize)
   count, _ := file.Read(data)
@@ -32,14 +30,11 @@ func readFile(filename string) string {
     count, _ = file.Read(data)
   }
 
-  defer file.Close()
-
   return fileread
 }
 
-func generateTags(infile string, outfile string) ([]string, []string) {
-  readfile := readFile(infile)
-  out_f, _ := os.Create(outfile)
+func GenerateTags(rf *os.File, of *os.File) ([]string, []string) {
+  readfile := readFile(rf)
 
   re := regexp.MustCompile("<[a-zA-Z0-9= \"]*>")
   tags := re.FindAllIndex([]byte(readfile), -1)
@@ -138,20 +133,7 @@ func generateTags(infile string, outfile string) ([]string, []string) {
     outstring += ">"
   }
   outstring += readfile[tags[len(tags)-1][1]:]
-  out_f.WriteString(outstring)
-
-  defer out_f.Close()
+  of.WriteString(outstring)
 
   return imp_ids, nimp_ids
-}
-
-func main() {
-  fmt.Println("")
-
-  var infile = "dummy.html"
-  var outfile = "replaced.html"
-  imps, nimps := generateTags(infile, outfile)
-
-  fmt.Println("IMPS:", imps)
-  fmt.Println("NIMPS:", nimps)
 }
