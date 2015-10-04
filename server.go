@@ -2,21 +2,59 @@ package main
 
 import (
 	// "fmt"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"math/rand"
+	"time"
 	"./lib/db"
 )
+
+func randomString(n int) string {
+	rand.Seed(time.Now().UnixNano())
+	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	b := make([]rune, n)
+    for i := range b {
+        b[i] = letterRunes[rand.Intn(len(letterRunes))]
+    }
+    return string(b)
+}
 
 func main() {
 
 	s := db.Connect()
 	defer db.Disconnect(s)
 	cranium := db.SetDB(s)
-	db.InsertNewVisitor(cranium, "A8b839013jgkke")
-	db.InsertNewDataEntry(cranium, "A8b839013jgkke")
-
-	// TODO: Call Peter's code
 
 	r := gin.Default()
-	r.StaticFile("/", "./index.html")
+
+	// Set up Gin cookies
+	store := sessions.NewCookieStore([]byte("pladjamaicanwifflepoof"))
+	r.Use(sessions.Sessions("cranium_session", store))
+
+	var title string;
+
+	r.LoadHTMLFiles("templates/index.html")
+    r.GET("/", func(c *gin.Context) {
+    	session := sessions.Default(c)
+    	craniumId := session.Get("cranium_id")
+    	if craniumId == nil {
+    		// Insert a new user if the user has no cookie
+    		newCraniumId := randomString(30);
+			db.InsertNewVisitor(cranium, newCraniumId)
+			session.Set("cranium_id", newCraniumId)
+			session.Save()
+			title = newCraniumId
+			// Call peter's function to get a bunch of atags, ptags, etc.
+			// db.InsertNewDataEntry(cranium, "A8b839013jgkke", atags, ptags, etc.)
+    	} else {
+    		// The user already exists, so ask the database for attributes
+    		title = craniumId.(string)
+    	}
+        c.HTML(http.StatusOK, "index.html", gin.H{
+            "title": "cranium.css | " + title,
+        })
+    })
+
 	r.Run(":1225")
 }
