@@ -1,7 +1,6 @@
 package main
 
 import (
-    "fmt"
     "html/template"
     "github.com/gin-gonic/contrib/sessions"
     "github.com/gin-gonic/gin"
@@ -60,7 +59,6 @@ func main() {
             defer outfile.Close()
             // Get all the Ids for tags in question
             aImpIds, pImpIds, imgImpIds, aNimpIds, pNimpIds, imgNimpIds := preprocess.GenerateTags(readfile, outfile)
-            fmt.Println(aImpIds, pImpIds, imgImpIds, aNimpIds, pNimpIds, imgNimpIds)
             var atags []model.Atag
             var ptags []model.Ptag
             var imgtags []model.Imgtag
@@ -103,6 +101,12 @@ func main() {
             }
             de = db.InsertNewDataEntry(craniumDB, newCraniumId, atags, ptags, imgtags)
         } else {
+            readfile, _ := os.Open("templates/index-tmpl.html")
+            outfile, _ := os.Create("templates/index.html")
+            defer readfile.Close()
+            defer outfile.Close()
+            // Get all the Ids for tags in question
+            preprocess.GenerateTags(readfile, outfile)
             // The user already exists, so ask the database for attributes
             title = craniumId.(string)
             visitor := db.FetchMostRecentDataEntry(craniumDB, craniumId.(string))
