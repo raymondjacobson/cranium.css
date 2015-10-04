@@ -1,32 +1,33 @@
 import argparse
 import csv
 import json
+import pymongo
 
-def main(de0):
-  dump0() if de0 else dumpAll()
+from pymongo import MongoClient
 
+client = MongoClient('localhost', 27017)
+db = client.cranium
 
-def dumpAll():
-  with open("de_dump_all.json", "r") as de_dump_all:
-    dump = json.load(de_dump_all)
-
-    with open("de_td_all.csv", "wb+") as de_td_all:
-      writer = csv.writer(de_td_all)
-      for de in dump["data"]:
-        readDataEntry(de, writer)
-    de_td_all.close()
-  de_dump_all.close()
+def main(de0, vid):
+  dump0(vid) if de0 else dumpAll(vid)
 
 
-def dump0():
-  with open("de_dump0.json", "r") as de_dump0:
-    dump = json.load(de_dump0)
+def dumpAll(vid):
+  query = db.visitors.find_one({"vid": vid})
+  print query['data']
+  with open("learn/de_td_all.csv", "wb+") as de_td_all:
+    writer = csv.writer(de_td_all)
+    for de in query['data']:
+      readDataEntry(de, writer)
 
-    with open("de_td0.csv", "wb+") as de_td0:
-      writer = csv.writer(de_td0)
-      readDataEntry(dump["data"][0], writer)
-    de_td0.close()
-  de_dump0.close()
+
+def dump0(vid):
+  query = db.visitors.find_one({"vid": vid})
+  print query['data']
+  with open("learn/de_td0.csv", "wb+") as de_td0:
+    writer = csv.writer(de_td0)
+    readDataEntry(query['data'][0], writer)
+
 
 
 def readDataEntry(de, writer):
@@ -42,45 +43,47 @@ def readDataEntry(de, writer):
 def writeAtags(elems, writer):
   for elem in elems:
     writer.writerow([
-      elem["id"],
       elem["fontsize"],
       elem["fontstyle"],
       1 if elem["color"] else 0,
       elem["padding"],
       elem["hover"],
       elem["click"],
-      elem["frametime"]
+      elem["frametime"],
+      elem["id"]
     ])
 
 
 def writePtags(elems, writer):
   for elem in elems:
     writer.writerow([
-      elem["id"],
       elem["fontsize"],
       elem["fontstyle"],
       elem["padding"],
       elem["hover"],
       elem["click"],
-      elem["frametime"]
+      elem["frametime"],
+      elem["id"]
     ])
 
 
 def writeImgtags(elems, writer):
   for elem in elems:
     writer.writerow([
-      elem["id"],
       elem["width"],
       elem["padding"],
       elem["hover"],
       elem["click"],
-      elem["frametime"]
+      elem["frametime"],
+      elem["id"]
     ])
 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description="Dump JSON data to a CSV.")
+  parser.add_argument("vid", help="str",
+                    type=str)
   parser.add_argument("-de0", action="store_true", default=False)
   args = parser.parse_args()
 
-  main(args.de0)
+  main(args.de0, args.vid)

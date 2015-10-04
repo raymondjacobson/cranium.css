@@ -1,7 +1,7 @@
 package main
 
 import (
-    // "fmt"
+    "fmt"
     "html/template"
     "github.com/gin-gonic/contrib/sessions"
     "github.com/gin-gonic/gin"
@@ -165,14 +165,16 @@ func main() {
                 db.UpdateImgtagField(craniumDB, craniumId.(string), tag)
             }
         }
-        app := "mongoexport"
-        cmd := exec.Command(app, "--host=127.0.0.1", "--db", "cranium", "--collection", "visitors", "--out", "dump/visitors.json")
-        _, err := cmd.Output()
-
+        // CSV the data
+        app := "python"
+        cmd := exec.Command(app, "learn/csvgen.py", craniumId.(string), "-de0")
+        fmt.Println()
+        out, err := cmd.Output()
         if err != nil {
             println(err.Error())
             return
         }
+        fmt.Println(string(out))
     })
 
     r.Run(":1225")
