@@ -48,7 +48,7 @@ func getFontStyle(FontStyle int) string {
 }
 
 func (p Ptag) GetCssFontStyle() string {
-  return GetFontStyle(p.FontStyle)
+  return getFontStyle(p.FontStyle)
 }
 
 func (p Ptag) GetCssFontSize() string {
@@ -60,7 +60,7 @@ func (p Ptag) GetCssPadding() string {
 }
 
 func (a Atag) GetCssFontStyle() string {
-  return GetFontStyle(a.FontStyle)
+  return getFontStyle(a.FontStyle)
 }
 
 func (a Atag) GetCssFontSize() string {
@@ -89,7 +89,7 @@ type Imgtag struct {
 }
 
 func (i Imgtag) GetCssWidth() string {
-  return fmt.Sprintf("width: %dpx;", i.Width)
+  return fmt.Sprintf("width: %d%%;", i.Width)
 }
 
 func (i Imgtag) GetCssPadding() string {

@@ -2,16 +2,17 @@ package main
 
 import (
     "fmt"
+    "html/template"
     "github.com/gin-gonic/contrib/sessions"
     "github.com/gin-gonic/gin"
     "net/http"
     "math/rand"
     "os"
     "time"
-    "./lib"
     "./lib/cssgen"
     "./lib/db"
     "./lib/model"
+    "./lib/preprocess"
 )
 
 func randomString(n int) string {
@@ -35,9 +36,14 @@ func main() {
     store := sessions.NewCookieStore([]byte("pladjamaicanwifflepoof"))
     r.Use(sessions.Sessions("cranium_session", store))
 
-    var title string;
+    var title string
+
+    var de model.DataEntry
 
     r.LoadHTMLGlob("templates/*")
+    r.Static("/assets", "./assets")
+
+    // Routes
     r.GET("/", func(c *gin.Context) {
         session := sessions.Default(c)
         craniumId := session.Get("cranium_id")
@@ -95,17 +101,17 @@ func main() {
                 imgtag.Important = false
                 imgtags = append(imgtags, imgtag)
             }
-            de := db.InsertNewDataEntry(craniumDB, newCraniumId, atags, ptags, imgtags)
-
-            fmt.Println(de)
+            de = db.InsertNewDataEntry(craniumDB, newCraniumId, atags, ptags, imgtags)
         } else {
             // The user already exists, so ask the database for attributes
             title = craniumId.(string)
             visitor := db.FetchMostRecentDataEntry(craniumDB, craniumId.(string))
-            fmt.Println(visitor.Data[0])
+            de = visitor.Data[0]
         }
+        craniumcss := cssgen.GenCss(de)
         c.HTML(http.StatusOK, "index.html", gin.H{
             "title": "cranium.css | " + title,
+            "craniumcss": template.CSS(craniumcss),
         })
     })
 
