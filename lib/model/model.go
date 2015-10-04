@@ -103,15 +103,20 @@ type Visitor struct {
     Data []DataEntry
 }
 
-const PtagDefault = Ptag{
+const PtagDefault = Ptag {
     FontSize: 16,
     FontStyle: 0,
-    Padding: 10,
+    Padding: 10
 }
 
-const AtagDefault = Atag{
+const AtagDefault = Atag {
     FontSize: 16,
     FontStyle: 3,
     Color: 1,
-    Padding: 10,
+    Padding: 10
+}
+
+const ImgtagDefault = Imgtag {
+    Width: 100,
+    Padding: 10
 }
