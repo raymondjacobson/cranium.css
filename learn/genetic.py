@@ -3,6 +3,13 @@ import csv
 import numpy as np
 import argparse
 
+import pymongo
+
+from pymongo import MongoClient
+
+client = MongoClient('localhost', 27017)
+db = client.cranium
+
 def readCorrectPoints(filename):
 	data = {'imp':[], 'nimp':[]}
 	with open(filename, 'r') as f:
@@ -57,8 +64,9 @@ def averagePoints(points):
 
 	return avg
 
-def genNewPoint(point, csvfile):
-	pass
+def genNewPoint(csvfile):
+	
+
 
 def main():
 	filename = 'learn/training data/ptag.csv'
@@ -66,10 +74,8 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Genetic algorithm to fix mismatched points.')
-	parser.add_argument('point', type=int,
-	                    help='mismatched point to be moved')
 	parser.add_argument('csvfile', type=str,
 	                    help='csv file with training points')
 
 	args = parser.parse_args()
-	main()
+	genNewPoint(args.csvfile)

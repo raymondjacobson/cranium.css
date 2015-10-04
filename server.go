@@ -135,7 +135,7 @@ func main() {
             // The user already exists, so ask the database for attributes
             title = craniumId.(string)
             visitor := db.FetchVisitor(craniumDB, craniumId.(string))
-            de = visitor.Data[0]
+            de = visitor.Data[len(visitor.Data)-1]
         }
         craniumcss := cssgen.GenCss(de)
         c.HTML(http.StatusOK, "index.html", gin.H{
@@ -178,14 +178,17 @@ func main() {
 
         fmt.Println(craniumId.(string))
 
-        cmd1 := exec.Command(app, "learn/classify.py", "learn/de_td0_a.csv", "a", craniumId.(string))
+        cmd1 := exec.Command(app, "learn/classify.py", "learn/de_td0_a.csv", "a", craniumId.(string), "", "", "")
         cmd1.Output()
 
-        cmd2 := exec.Command(app, "learn/classify.py", "learn/de_td0_p.csv", "p", craniumId.(string))
+        cmd2 := exec.Command(app, "learn/classify.py", "learn/de_td0_p.csv", "p", craniumId.(string), "", "", "")
         cmd2.Output()
 
-        cmd3 := exec.Command(app, "learn/classify.py", "learn/de_td0_img.csv", "img", craniumId.(string))
+        cmd3 := exec.Command(app, "learn/classify.py", "learn/de_td0_img.csv", "img", craniumId.(string), "", "", "")
         cmd3.Output()
+
+        cmd4 := exec.Command(app, "learn/classify.py", "", "solve", craniumId.(string), "learn/training/atag.csv", "learn/training/ptag.csv", "learn/training/imgtag.csv")
+        cmd4.Output()
 
         // Run genetic
 
