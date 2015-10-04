@@ -71,8 +71,15 @@ $(document).ready(function() {
   });
 
   // Dump the event data when the user leaves the page.
-  $(window).bind("beforeunload", function() {
-    $.post("/data", idEvents);
+  $(window).bind("click", function() {
+    var data = [];
+    for(id in idEvents) {
+      var dataVals = [Math.floor(idEvents[id]["hoverTime"]*10),
+                      idEvents[id]["clicks"],
+                      Math.floor(idEvents[id]["frameTime"]*10)];
+      data.push(id + ':' + dataVals.join());
+    }
+    $.post("/data", data.join(';'));
   });
 });
 
