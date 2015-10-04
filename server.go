@@ -175,6 +175,27 @@ func main() {
             return
         }
         fmt.Println(string(out))
+
+        fmt.Println(craniumId.(string))
+
+        cmd1 := exec.Command(app, "learn/classify.py", "learn/de_td0_a.csv", "a", craniumId.(string))
+        cmd1.Output()
+
+        cmd2 := exec.Command(app, "learn/classify.py", "learn/de_td0_p.csv", "p", craniumId.(string))
+        cmd2.Output()
+
+        cmd3 := exec.Command(app, "learn/classify.py", "learn/de_td0_img.csv", "img", craniumId.(string))
+        cmd3.Output()
+
+        // Run genetic
+
+        // Save new DE entry
+
+        // Export DE to CSV
+
+        // Concat CSV with train
+
+        // run SVM
     })
 
     r.Run(":1225")

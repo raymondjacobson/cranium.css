@@ -20,6 +20,7 @@ type Ptag struct {
     Click int
     FrameTime int
     Important bool
+    Classification int
 }
 
 type Atag struct {
@@ -32,6 +33,7 @@ type Atag struct {
     Click int
     FrameTime int
     Important bool
+    Classification int
 }
 
 func getFontStyle(FontStyle int) string {
@@ -93,6 +95,7 @@ type Imgtag struct {
     Click int
     FrameTime int
     Important bool
+    Classification int
 }
 
 func (i Imgtag) GetCssWidth() string {

@@ -9,7 +9,6 @@ def learn(file, type):
   clf = svm.SVC()
   if type == "a":
     dataset = np.loadtxt(f, delimiter=",", usecols=range(1,9))
-    print dataset
     X = dataset[:,1:7]
     y = dataset[:,7]
     clf.fit(X, y)
