@@ -14,7 +14,7 @@ import (
   "strconv"
 )
 
-const prefix = "ml"
+const prefix = "imp"
 var tags = []string {"p", "a", "img"}
 
 func readFile(filename string) string {
@@ -37,18 +37,25 @@ func readFile(filename string) string {
   return fileread
 }
 
-func generateTags(infile string, outfile string) {
+func generateTags(infile string, outfile string) ([]string, []string) {
   readfile := readFile(infile)
   out_f, _ := os.Create(outfile)
 
   re := regexp.MustCompile("<[a-zA-Z0-9= \"]*>")
   tags := re.FindAllIndex([]byte(readfile), -1)
 
-  a_counter := 0
-  p_counter := 0
-  img_counter := 0
+  a_count := 0
+  p_count := 0
+  img_count := 0
+
+  n_a_count := 0
+  n_p_count := 0
+  n_img_count := 0
 
   outstring := ""
+  var imp_ids []string
+  var nimp_ids []string
+
   for i := 0; i < len(tags); i++ {
     prev_end := 0
     if i == 0 {
@@ -88,22 +95,45 @@ func generateTags(infile string, outfile string) {
     pre_id = pre_id[:len(pre_id)]
     post_id = post_id[:len(post_id)]
 
-    if id == "ml" {
-      stag_counter := ""
+    if id == prefix {
+      stag_count := ""
       if tag_type == "a" {
-        stag_counter = strconv.Itoa(a_counter)
-        a_counter += 1
+        stag_count = strconv.Itoa(a_count)
+        a_count += 1
       } else if tag_type == "p" {
-        stag_counter = strconv.Itoa(p_counter)
-        p_counter += 1
+        stag_count = strconv.Itoa(p_count)
+        p_count += 1
       } else if tag_type == "img" {
-        stag_counter = strconv.Itoa(img_counter)
-        img_counter += 1
+        stag_count = strconv.Itoa(img_count)
+        img_count += 1
       }
 
-      outstring += pre_id+"id=\"ml-"+tag_type+"-"+stag_counter+"\""+post_id
+      gen_id := prefix+"-"+tag_type+"-"+stag_count
+      imp_ids = append(imp_ids, gen_id)
+      outstring += pre_id+"id=\""+gen_id+"\""+post_id
     } else {
+      nimp := true
+      stag_count := ""
+      if tag_type == "a" {
+        stag_count = strconv.Itoa(n_a_count)
+        n_a_count += 1
+      } else if tag_type == "p" {
+        stag_count = strconv.Itoa(n_p_count)
+        n_p_count += 1
+      } else if tag_type == "img" {
+        stag_count = strconv.Itoa(n_img_count)
+        n_img_count += 1
+      } else {
+        nimp = false
+      }
+
       outstring += full_tag
+
+      if nimp {
+        gen_id := "n"+prefix+"-"+tag_type+"-"+stag_count
+        nimp_ids = append(nimp_ids, gen_id)
+        outstring += " id=\""+gen_id+"\""
+      }
     }
     outstring += ">"
   }
@@ -111,6 +141,8 @@ func generateTags(infile string, outfile string) {
   out_f.WriteString(outstring)
 
   defer out_f.Close()
+
+  return imp_ids, nimp_ids
 }
 
 func main() {
@@ -118,5 +150,8 @@ func main() {
 
   var infile = "dummy.html"
   var outfile = "replaced.html"
-  generateTags(infile, outfile)
+  imps, nimps := generateTags(infile, outfile)
+
+  fmt.Println("IMPS:", imps)
+  fmt.Println("NIMPS:", nimps)
 }
