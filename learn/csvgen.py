@@ -62,6 +62,7 @@ def writeDataEntry(de, a_writer, p_writer, img_writer):
 def writeAtags(elems, writer):
   for elem in elems:
     writer.writerow([
+      elem["id"]
       elem["fontsize"],
       elem["fontstyle"],
       1 if elem["color"] else 0,
@@ -69,32 +70,31 @@ def writeAtags(elems, writer):
       elem["hover"],
       elem["click"],
       elem["frametime"],
-      elem["id"]
     ])
 
 
 def writePtags(elems, writer):
   for elem in elems:
     writer.writerow([
+      elem["id"]
       elem["fontsize"],
       elem["fontstyle"],
       elem["padding"],
       elem["hover"],
       elem["click"],
       elem["frametime"],
-      elem["id"]
     ])
 
 
 def writeImgtags(elems, writer):
   for elem in elems:
     writer.writerow([
+      elem["id"]
       elem["width"],
       elem["padding"],
       elem["hover"],
       elem["click"],
       elem["frametime"],
-      elem["id"]
     ])
 
 
